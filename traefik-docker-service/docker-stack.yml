@@ -1,0 +1,28 @@
+version: '3.2'
+
+services:
+    traefik:
+        container_name: traefik
+        image_name: traefik:1.6.3
+        expose:
+          - 80
+          - 443
+        ports:
+          - mode: host
+            published: 80
+            target: 80
+          - mode: host
+            published: 443
+            target: 443        
+          - mode: host
+            published: 8080
+            target: 8080
+        volumes:
+          - /var/run/docker.sock
+          - ./config/:/etc/traefik/
+
+network:
+    service:
+        external:
+            name: swarm-service 
+        
