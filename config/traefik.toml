@@ -1,0 +1,33 @@
+debug = false
+
+logLevel = "ERROR"
+defaultEntryPoints = ["https","http"]
+
+# Entrypoints
+[entryPoints]
+    [entryPoints.http]
+    address = ":80"
+        [entryPoints.http.redirect]
+        entryPoint = "https"
+    [entryPoints.https]
+    address = ":443"
+        [entryPoints.https.tls]
+
+# Let's Encrypt domains
+[[acme.domains]]
+main = "service.jsoude.net"
+
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "service.jsoude.net"
+watch = true
+exposedbydefault = false
+
+[acme]
+email = "jsoude@gmail.com"
+storage = "acme.json"
+entryPoint = "https"
+OnHostRule = true
+[acme.httpChallenge]
+entryPoint = "http"
