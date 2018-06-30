@@ -3,7 +3,8 @@ version: '3.2'
 services:
     traefik:
         container_name: traefik
-        image_name: traefik:1.6.3
+        image: traefik:1.6.4
+        command: --api --docker --docker.swarmMode --docker.watch --docker.domain=service.jsoude.net --web --web.metrics.prometheus --web.metrics.prometheus.buckets="0.1,0.3,1.2,5.0"
         expose:
           - 80
           - 443
@@ -17,12 +18,15 @@ services:
           - mode: host
             published: 8080
             target: 8080
+        networks:
+          - service
         volumes:
-          - /var/run/docker.sock
-          - ./config/:/etc/traefik/
+          - /var/run/docker.sock:/var/run/docker.sock
+          - ./config/acme.json:/etc/traefik/acme.json
+          - ./config/traefik.toml:/etc/traefik/traefik.toml
 
-network:
+networks:
     service:
         external:
             name: swarm-service 
-        
+
