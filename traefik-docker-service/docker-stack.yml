@@ -20,6 +20,16 @@ services:
             target: 8080
         networks:
           - service
+        deploy:
+          mode: global
+          placement:
+            constraints:
+              - node.role == manager
+          update_config:
+            parallelism: 1
+            delay: 10s
+          restart_policy:
+            condition: on-failure
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           - ./config/acme.json:/etc/traefik/acme.json
